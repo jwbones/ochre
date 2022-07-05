@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /.pnp
+/ochre-linux-x64
 .pnp.js
 
 # testing

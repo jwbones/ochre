@@ -107,7 +107,7 @@ const deepl_translate = async (text) => {
   const response = await fetch('https://api-free.deepl.com/v2/translate',
   {
     method: 'POST',
-    body: `auth_key=ef270073-d5a7-16f3-8bbf-d6363e8deae9:fx&text=${text}&target_lang=EN&source_lang=JA`,
+    body: `auth_key=${process.env.deepl_api_key}&text=${text}&target_lang=EN&source_lang=JA`,
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
   } 
   );

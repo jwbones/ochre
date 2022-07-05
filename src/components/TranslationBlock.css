@@ -4,6 +4,9 @@
     margin: 5px;
     width: 250px;
     min-width: 250px;
+    border-top: 1px dashed blue;
+    border-left: 1px dashed blue;
+    border-right: 1px dashed blue;
 }
 
 .Text {

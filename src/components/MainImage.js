@@ -34,7 +34,6 @@ class MainImage extends React.Component {
                 actualWidth: newActualWidth,
                 actualHeight: newActualHeight 
             })
-            console.log(this.state);
         }
     }
 
@@ -88,7 +87,6 @@ class MainImage extends React.Component {
         const scale = Math.min(actualHeight / originalHeight, actualWidth / originalWidth)
         const x = imageX + ((actualWidth - originalWidth * scale) / 2)
         const y = imageY + ((actualHeight - originalHeight * scale) / 2)
-        console.log(scale);
 
         const bboxes = blocks.map((block, i) => {
             return (

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import MainImage from './MainImage.js'
+import loading_gif from '../Ajax-loader.gif'
 import TranslationBar from './TranslationBar.js'
 
 import translationJson from '../sample_json.json'
@@ -51,13 +52,14 @@ class MainView extends React.Component {
 
         return (
             <div style={{height: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start', overflow: 'hidden', position: 'relative'}}>
-                <div style={{float: "left", background: "grey", height: '100vh', overflowY: 'scroll', minWidth: '270px'}}>
+                <div style={{float: "left", background: "#f5f5f5", height: '100vh', overflowY: 'auto', minWidth: '270px'}}>
+                    {selectedJson.length == 0 && (<img src={loading_gif} style={{maxWidth: '32px', maxHeight: '32px'}}></img>)}
                     <TranslationBar blocks={leftBlocks}/>
                 </div>
-                <div style={{float: "center", flexGrow: '1', background: 'black'}}>
+                <div style={{float: "center", flexGrow: '1', background: '#f5f5f5'}}>
                     <MainImage blocks={selectedJson}/>
                 </div>
-                <div style={{float: "right", background: "grey", height: '100vh', overflowY: 'scroll', minWidth: '270px'}}>
+                <div style={{float: "right", background: "#f5f5f5", height: '100vh', overflowY: 'auto', minWidth: '270px'}}>
                     <TranslationBar blocks={rightBlocks}/>
                 </div>
             </div>
