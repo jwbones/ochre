@@ -6,6 +6,8 @@ const fs = require('fs')
 
 const core = require('../src/core/core.js')
 
+require('dotenv').config()
+
 let mainWindow;
 
 
@@ -13,12 +15,16 @@ const pasteImage = async () => {
     console.log('paste image ipc recieved');
     const img = clipboard.readImage();
     fs.writeFileSync('pasted_img.png', img.toPNG());
-    const translated_blocks = await core.core('pasted_img.png');
-    console.log(img.getSize);
     mainWindow.webContents.send('new-json', {
-        blocks: translated_blocks,
+        blocks: [],
         img_dimensions: img.getSize()
     })
+    core.core('pasted_img.png').then((translated_blocks) => {
+        mainWindow.webContents.send('new-json', {
+            blocks: translated_blocks,
+            img_dimensions: img.getSize()
+        })
+    });
     return img.toDataURL();
 }
 
@@ -29,7 +35,8 @@ const createWindow = () => {
         height: 1200,
         webPreferences: {
             nodeIntegration: true,
-            preload: __dirname + '/preload.js'
+            preload: __dirname + '/preload.js',
+            contextIsolation: true,
         },
     });
     window.loadURL(
@@ -37,6 +44,8 @@ const createWindow = () => {
           ? 'http://localhost:3000'
           : `file://${path.join(__dirname, '../build/index.html')}`
       );
+
+    window.setMenu(null);
     mainWindow = window;
 
     if (isDev) {
