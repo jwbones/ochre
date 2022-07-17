@@ -7,7 +7,8 @@ const translateClient = new Translate();
 const fs = require('fs').promises;
 const fetch = require('node-fetch');
 
-const core = async (img_path) => {
+const deepl_langs = ['BG','CS','DA','DE','EL','EN','ES','ET','FI','FR','HU','ID','IT','JA','LT','LV','NL','PL','PT','RO','RU','SK','SL','SV','TR','ZH'];
+const core = async (img_path, from = 'JA', to = 'EN', use_lang_hint = true) => {
   console.log('starting core');
 
     const contents = await fs.readFile(img_path, {encoding: 'base64'}, () =>{});
@@ -24,7 +25,7 @@ const core = async (img_path) => {
               }
             ],
             "imageContext": {
-              "languageHints": ["ja"]
+              "languageHints": [use_lang_hint ? from : '']
             }
           }
         ]
@@ -89,8 +90,8 @@ const core = async (img_path) => {
     })
 
     translated_blocks = await Promise.all(blocks.map(async (block) => {
-      const translations = await translateClient.translate(block.text, 'en');
-      const translations_d = await deepl_translate(block.text);
+      const translations = await translateClient.translate(block.text, to);
+      const translations_d = await deepl_translate(block.text, from, to);
 
       return {
         text_orig: block.text,
@@ -103,11 +104,17 @@ const core = async (img_path) => {
     return translated_blocks;
 }
 
-const deepl_translate = async (text) => {
+const deepl_translate = async (text, from, to) => {
+  if (!deepl_langs.includes(from)) {
+    return `Source language not supported by deepl (${from})`;
+  }
+  if (!deepl_langs.includes(to)) {
+    return `Target language not supported by deepl (${to})`;
+  }
   const response = await fetch('https://api-free.deepl.com/v2/translate',
   {
     method: 'POST',
-    body: `auth_key=${process.env.deepl_api_key}&text=${text}&target_lang=EN&source_lang=JA`,
+    body: `auth_key=${process.env.deepl_api_key}&text=${text}&target_lang=${to}&source_lang=${from}`,
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
   } 
   );

@@ -10,6 +10,15 @@ require('dotenv').config()
 
 let mainWindow;
 
+let from_lang = 'JA';
+let to_lang = 'EN';
+
+const updateLangs = (from, to) => {
+    console.log(from);
+    from_lang = from;
+    to_lang = to;
+    console.log(`updated languages: source: ${from_lang}, target ${to_lang}`);
+}
 
 const pasteImage = async () => {
     console.log('paste image ipc recieved');
@@ -19,7 +28,7 @@ const pasteImage = async () => {
         blocks: [],
         img_dimensions: img.getSize()
     })
-    core.core('pasted_img.png').then((translated_blocks) => {
+    core.core('pasted_img.png', from_lang, to_lang).then((translated_blocks) => {
         mainWindow.webContents.send('new-json', {
             blocks: translated_blocks,
             img_dimensions: img.getSize()
@@ -30,6 +39,9 @@ const pasteImage = async () => {
 
 const createWindow = () => {
     ipcMain.handle('paste-image', pasteImage);
+    ipcMain.on('update-langs', (event, from, to) => {
+        updateLangs(from,to);
+    });
     const window = new BrowserWindow({
         width: 1200,
         height: 1200,
