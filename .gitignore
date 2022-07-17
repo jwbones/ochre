@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 /ochre-linux-x64
+/ochre-win32-x64
 .pnp.js
 
 # testing
