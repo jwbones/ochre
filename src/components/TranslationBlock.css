@@ -14,4 +14,6 @@
     padding: 3px;
     border-bottom: 1px solid;
     border-color: black;
+    position: relative;
+    z-index: 8;
 }
