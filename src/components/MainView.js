@@ -4,7 +4,7 @@ import MainImage from './MainImage.js'
 import loading_gif from '../Ajax-loader.gif'
 import TranslationBar from './TranslationBar.js'
 
-import translationJson from '../sample_json.json'
+//import translationJson from '../sample_json.json'
 import ControlBar from './ControlBar.js';
 
 const newImage = new CustomEvent('newimage');
@@ -14,7 +14,7 @@ class MainView extends React.Component {
     constructor() {
         super();
         this.state = {
-            selectedJson: translationJson,
+            selectedJson: null,
             img_width: 0
         }
     }
@@ -37,29 +37,32 @@ class MainView extends React.Component {
         const rightBlocks = []
         const leftBlocks = []
 
-        selectedJson.forEach((block, i) => {
-            if (block.bbox.vertices[0].x > (img_width / 2)) {
-                rightBlocks.push({
-                    ...block,
-                    block_index : i,
-                })
-            } else {
-                leftBlocks.push({
-                    ...block,
-                    block_index : i,
-                })
-            }
-        })
+
+        if (selectedJson) {
+            selectedJson.forEach((block, i) => {
+                if (block.bbox.vertices[0].x > (img_width / 2)) {
+                    rightBlocks.push({
+                        ...block,
+                        block_index : i,
+                    })
+                } else {
+                    leftBlocks.push({
+                        ...block,
+                        block_index : i,
+                    })
+                }
+            })
+        }
 
         return (
             <div style={{height: '100%'}}>
                 <div style={{height: '95%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start', overflow: 'hidden', position: 'relative'}}>
                     <div style={{float: "left", background: "#f5f5f5", height: '95vh', overflowY: 'auto', minWidth: '270px'}}>
-                        {selectedJson.length == 0 && (<img src={loading_gif} style={{maxWidth: '32px', maxHeight: '32px'}}></img>)}
+                        {selectedJson !== null && selectedJson.length == 0 && (<img src={loading_gif} style={{maxWidth: '32px', maxHeight: '32px'}}></img>)}
                         <TranslationBar blocks={leftBlocks}/>
                     </div>
                     <div style={{float: "center", flexGrow: '1', background: '#f5f5f5'}}>
-                        <MainImage blocks={selectedJson}/>
+                        <MainImage blocks={selectedJson || []}/>
                     </div>
                     <div style={{float: "right", background: "#f5f5f5", height: '95vh', overflowY: 'auto', minWidth: '270px'}}>
                         <TranslationBar blocks={rightBlocks}/>
