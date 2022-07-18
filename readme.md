@@ -5,7 +5,7 @@ build:
 ```
 npm i
 npm run build
-npx electron-packager . ochre --platform linux --arch x64 --overwrite
+npx electron-packager . ochre --platform PLATFORM --arch YOUR_ARCH --overwrite
 ```
 
 setup:
