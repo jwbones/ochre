@@ -1,3 +1,5 @@
+read comics in languages you don't know!
+
 ochre is a desktop app to do rough translations of images
 
 build:
