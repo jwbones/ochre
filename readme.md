@@ -1,5 +1,13 @@
 ochre is a desktop app to do rough translations of images
 
+build:
+
+```
+npm i
+npm run build
+npx electron-packager . ochre --platform linux --arch x64 --overwrite
+```
+
 setup:
 1. get yourself a service key for google cloud services
 
