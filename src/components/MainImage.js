@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import defaultImg from '../test_img.jpeg';
+import defaultImg from '../ochre.png';
 
 import BBox from './BBox.js'
 
