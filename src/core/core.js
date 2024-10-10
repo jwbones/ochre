@@ -5,7 +5,6 @@ const visionClient = new vision.ImageAnnotatorClient();
 const translateClient = new Translate();
 
 const fs = require('fs').promises;
-const fetch = require('node-fetch');
 
 const deepl_langs = ['BG','CS','DA','DE','EL','EN','ES','ET','FI','FR','HU','ID','IT','JA','LT','LV','NL','PL','PT','RO','RU','SK','SL','SV','TR','ZH'];
 const core = async (img_path, from = 'JA', to = 'EN', use_lang_hint = true) => {
@@ -90,8 +89,14 @@ const core = async (img_path, from = 'JA', to = 'EN', use_lang_hint = true) => {
     })
 
     translated_blocks = await Promise.all(blocks.map(async (block) => {
-      const translations = await translateClient.translate(block.text, to);
-      const translations_d = await deepl_translate(block.text, from, to);
+      const translations = await translateClient.translate(block.text, to).catch(e => {
+        console.log(e);
+        return 'google translate failed'
+      })
+      const translations_d = await deepl_translate(block.text, from, to).catch(e => {
+        console.log(e);
+        return 'deepl translate failed'
+      })
 
       return {
         text_orig: block.text,
